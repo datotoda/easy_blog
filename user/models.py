@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import validate_email
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -29,7 +30,8 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('birthdate', timezone.now())
-        extra_fields.setdefault('image_url', "https://pbs.twimg.com/profile_images/1387934781514686468/DvGgBAHs_400x400.jpg")
+        extra_fields.setdefault('image_url',
+                                "https://pbs.twimg.com/profile_images/1387934781514686468/DvGgBAHs_400x400.jpg")
         extra_fields.setdefault('phone_number', '0')
 
         if extra_fields.get("is_staff") is not True:
@@ -42,9 +44,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
-    birthdate = models.DateField(verbose_name=_('Birth Date'))
-    image_url = models.URLField(verbose_name=_("Image URL"), blank=True,
-                                default='https://www.pngkey.com/png/detail/115-1150152_default-profile-picture-avatar-png-green.png')
+    image_url = models.URLField(verbose_name=_("Image URL"), blank=True)
     phone_number = models.CharField(max_length=50, verbose_name=_('Phone Number'), null=True, blank=True)
     # saved_posts = models.ManyToManyField(Post)
 
@@ -54,3 +54,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.get_full_name()
+
+    def get_absolute_url(self):
+        return reverse('user:profile', kwargs={'username': self.username})
