@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <title>{% block title %}Blog{% endblock title %}</title>
+    </head>
+    <body>
+
+        <ul>
+            <li><a href={% url 'blog:home' %}>home</a></li>
+            {% if not request.user.is_authenticated %}
+                <li><a href={% url 'user:login' %}>login</a></li>
+                <li><a href={% url 'user:registration' %}>registration</a></li>
+            {% else %}
+                <li><form method="post" action={% url 'user:logout' %}>{% csrf_token %}<button>logout</button></form></li>
+            {% endif %}
+        </ul>
+
+        {% block content %}
+        {% endblock content %}
+
+    </body>
+</html>
