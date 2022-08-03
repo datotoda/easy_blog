@@ -12,7 +12,7 @@ class EmployeeAdmin(UserAdmin):
             'fields': ('username', 'email', 'password')
         }),
         (_('Personal info'), {
-            'fields': ('first_name', 'last_name', 'birthdate', 'phone_number', 'image_url')
+            'fields': ('first_name', 'last_name', 'phone_number', 'image_url')
         }),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
@@ -26,7 +26,7 @@ class EmployeeAdmin(UserAdmin):
             'classes': ('wide',),
             'fields': (
                 'username', 'email', 'password1', 'password2',
-                'first_name', 'last_name', 'birthdate', 'phone_number', 'image_url'),
+                'first_name', 'last_name', 'phone_number', 'image_url'),
         }),
     )
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
