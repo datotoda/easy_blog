@@ -14,3 +14,10 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post-detail.html'
     context_object_name = 'post'
+
+
+class PostListlView(ListView):
+    model = Post
+    template_name = 'blog/post-list.html'
+    context_object_name = 'posts'
+    paginate_by = 10
