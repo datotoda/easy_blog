@@ -26,6 +26,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('tags',)
     search_fields = ('title', 'value')
     list_display = ('title', 'value')
+    prepopulated_fields = {"slug": ("title",)}
 
 
 @admin.register(Comment)
