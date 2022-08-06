@@ -3,14 +3,14 @@ from blog.models import Color, Tag, Post, Comment
 
 
 @admin.register(Color)
-class CommentAdmin(admin.ModelAdmin):
+class ColorAdmin(admin.ModelAdmin):
     list_filter = ('value',)
     search_fields = ('value',)
     list_display = ('value',)
 
 
 @admin.register(Tag)
-class CommentAdmin(admin.ModelAdmin):
+class TagAdmin(admin.ModelAdmin):
     list_filter = ('value', 'color')
     search_fields = ('value', 'color')
     list_display = ('value', 'color')
@@ -22,7 +22,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 @admin.register(Post)
-class CommentAdmin(admin.ModelAdmin):
+class PostAdmin(admin.ModelAdmin):
     list_filter = ('tags',)
     search_fields = ('title', 'value')
     list_display = ('title', 'value')
