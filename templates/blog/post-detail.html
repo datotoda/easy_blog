@@ -9,9 +9,13 @@
     <h1>{{ post.title }}</h1>
     <p>{{ post.value }}</p>
     <img src="{{ post.image_url }}" alt="post image">
-    <p>Post tags</p>
+    <h3>Post tags</h3>
     {% for tag in post.tags.all %}
         <p>{{ tag }}</p>
+    {% endfor %}
+    <h3>Post comments</h3>
+    {% for comment in post.comments.all %}
+        <p>{{ comment }}</p>
     {% endfor %}
 
 {% endblock content %}
