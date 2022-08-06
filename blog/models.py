@@ -1,5 +1,4 @@
 from django.db import models
-from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
@@ -27,11 +26,9 @@ class Post(models.Model):
     value = models.TextField(verbose_name=_('Post value'))
     tags = models.ManyToManyField(to='blog.Tag', related_name='posts', verbose_name=_('Post tags'), blank=True)
     image_url = models.URLField(verbose_name=_('Post thumbnail url'), blank=True)
+    slug = models.SlugField(max_length=70, verbose_name=_('Post slug'), unique=True)
     updated_at = models.DateTimeField(verbose_name=_('Last saved at'), auto_now=True)
     created_at = models.DateTimeField(verbose_name=_('Created at'), auto_now_add=True)
-
-    def slug(self):
-        return slugify(f'{self.title} {self.id}')
 
     def __str__(self):
         return self.title
