@@ -19,4 +19,12 @@
         <p>{{ comment }}</p>
     {% endfor %}
 
+    {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button>submit</button>
+        </form>
+    {% endif %}
+
 {% endblock content %}
