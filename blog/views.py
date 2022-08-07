@@ -1,7 +1,9 @@
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView
+from django.views.generic.edit import FormMixin
 
-from blog.forms import PostModelForm
+from blog.forms import PostModelForm, CommentModelForm
 from blog.models import Post
 
 
@@ -9,10 +11,30 @@ class HomeView(TemplateView):
     template_name = 'home.html'
 
 
-class PostDetailView(DetailView):
+class PostDetailView(DetailView, FormMixin):
     model = Post
     template_name = 'blog/post-detail.html'
     context_object_name = 'post'
+    form_class = CommentModelForm
+    success_url = 'posts/'
+
+    def post(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect(reverse('user:login'))
+
+        form = self.get_form()
+        if form.is_valid():
+
+            obj = form.save(commit=False)
+            obj.post_id = self.get_object().id
+            obj.user_id = self.request.user.id
+            obj.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('blog:post-detail', kwargs={'slug': self.get_object().slug})
 
 
 class PostListlView(ListView):
