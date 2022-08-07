@@ -1,5 +1,5 @@
 from django.urls import reverse
-from django.views.generic import TemplateView, DetailView, ListView, CreateView
+from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView
 
 from blog.forms import PostModelForm
 from blog.models import Post
@@ -27,6 +27,15 @@ class PostCreateView(CreateView):
     form_class = PostModelForm
     template_name = 'blog/post-add.html'
     success_url = '/posts/'
+
+    def get_success_url(self):
+        return reverse('blog:post-detail', kwargs={'slug': self.object.slug})
+
+
+class PostEditView(UpdateView):
+    model = Post
+    form_class = PostModelForm
+    template_name = 'blog/post-update.html'
 
     def get_success_url(self):
         return reverse('blog:post-detail', kwargs={'slug': self.object.slug})
