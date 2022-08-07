@@ -1,6 +1,6 @@
 from django import forms
 
-from blog.models import Post
+from blog.models import Post, Comment
 
 
 class PostModelForm(forms.ModelForm):
@@ -13,4 +13,14 @@ class PostModelForm(forms.ModelForm):
             'value': forms.Textarea(),
             'image_url': forms.TextInput(),
             'tags': forms.SelectMultiple(),
+        }
+
+
+class CommentModelForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('value',)
+
+        widgets = {
+            'value': forms.Textarea(),
         }
