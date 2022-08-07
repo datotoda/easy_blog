@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
@@ -29,6 +30,10 @@ class Post(models.Model):
     slug = models.SlugField(max_length=70, verbose_name=_('Post slug'), unique=True)
     updated_at = models.DateTimeField(verbose_name=_('Last saved at'), auto_now=True)
     created_at = models.DateTimeField(verbose_name=_('Created at'), auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        return super(Post, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
