@@ -7,6 +7,7 @@
 {% block content %}
 
     <h1>{{ post.title }}</h1>
+    <h2><a href="{% url 'blog:post-edit' post.slug %}">edit</a></h2>
     <p>{{ post.value }}</p>
     <img src="{{ post.image_url }}" alt="post image">
     <h3>Post tags</h3>
