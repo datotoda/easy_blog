@@ -1,8 +1,7 @@
-from django.http import HttpResponse
+from django.urls import reverse
+from django.views.generic import TemplateView, DetailView, ListView, CreateView
 
-# Create your views here.
-from django.views.generic import TemplateView, DetailView, ListView
-
+from blog.forms import PostModelForm
 from blog.models import Post
 
 
@@ -21,3 +20,13 @@ class PostListlView(ListView):
     template_name = 'blog/post-list.html'
     context_object_name = 'posts'
     paginate_by = 10
+
+
+class PostCreateView(CreateView):
+    model = Post
+    form_class = PostModelForm
+    template_name = 'blog/post-add.html'
+    success_url = '/posts/'
+
+    def get_success_url(self):
+        return reverse('blog:post-detail', kwargs={'slug': self.object.slug})
