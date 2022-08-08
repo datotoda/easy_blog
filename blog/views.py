@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, DeleteView
 
 from blog.forms import PostModelForm, CommentModelForm
 from blog.models import Post
@@ -49,6 +49,14 @@ class PostCreateView(CreateView):
     form_class = PostModelForm
     template_name = 'blog/post-add.html'
     success_url = '/posts/'
+    object = None
+
+    def form_valid(self, form):
+        if not self.request.user.is_authenticated:
+            return self.http_method_not_allowed(self.request)
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('blog:post-detail', kwargs={'slug': self.object.slug})
@@ -61,3 +69,9 @@ class PostEditView(UpdateView):
 
     def get_success_url(self):
         return reverse('blog:post-detail', kwargs={'slug': self.object.slug})
+
+
+class PostDeleteView(DeleteView):
+    model = Post
+    success_url = reverse_lazy('blog:post-list')
+    template_name = 'blog/post-delete.html'
