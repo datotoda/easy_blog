@@ -1,5 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
@@ -25,6 +26,7 @@ class Tag(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=40, verbose_name=_('Post title'), unique=True)
     value = models.TextField(verbose_name=_('Post value'))
+    user = models.ForeignKey(to='user.User', related_name='posts', verbose_name=_('User'), on_delete=models.CASCADE)
     tags = models.ManyToManyField(to='blog.Tag', related_name='posts', verbose_name=_('Post tags'), blank=True)
     image_url = models.URLField(verbose_name=_('Post thumbnail url'), blank=True)
     slug = models.SlugField(max_length=70, verbose_name=_('Post slug'), unique=True)
@@ -34,6 +36,9 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         return super(Post, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('blog:post-detail', kwargs={'slug': self.slug})
 
     def __str__(self):
         return self.title
