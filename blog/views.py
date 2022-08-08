@@ -44,6 +44,11 @@ class PostListlView(ListView):
     paginate_by = 10
 
 
+class MyPostListlView(PostListlView):
+    def get_queryset(self):
+        return self.model.objects.filter(user_id=self.request.user.id).all()
+
+
 class PostCreateView(CreateView):
     model = Post
     form_class = PostModelForm
