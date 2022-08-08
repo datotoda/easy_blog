@@ -23,9 +23,9 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_filter = ('tags',)
-    search_fields = ('title', 'value')
-    list_display = ('title', 'value')
+    list_filter = ('tags', 'user')
+    search_fields = ('title', 'value', 'user')
+    list_display = ('title', 'value', 'user')
     prepopulated_fields = {"slug": ("title",)}
 
 
