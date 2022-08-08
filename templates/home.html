@@ -8,5 +8,8 @@
 
     <p>hello</p>
     <p><a href="{% url 'blog:post-list' %}">Posts</a></p>
-    
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'blog:my-post-list' %}">My Posts</a></p>
+    {% endif %}
+
 {% endblock content %}
