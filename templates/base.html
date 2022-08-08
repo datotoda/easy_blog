@@ -10,11 +10,12 @@
         <ul>
             <li><a href={% url 'blog:home' %}>home</a></li>
             <li><a href="{% url 'blog:post-list' %}">posts</a></li>
-            <li><a href="{% url 'blog:post-add' %}">add post</a></li>
             {% if not request.user.is_authenticated %}
                 <li><a href={% url 'user:login' %}>login</a></li>
                 <li><a href={% url 'user:registration' %}>registration</a></li>
             {% else %}
+                <li><a href="{% url 'blog:my-post-list' %}">my posts</li>
+                <li><a href="{% url 'blog:post-add' %}">add post</a></li>
                 <li><form method="post" action={% url 'user:logout' %}>{% csrf_token %}<button>logout</button></form></li>
             {% endif %}
         </ul>
