@@ -1,3 +1,4 @@
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView
@@ -57,8 +58,6 @@ class PostCreateView(CreateView):
     object = None
 
     def form_valid(self, form):
-        if not self.request.user.is_authenticated:
-            return self.http_method_not_allowed(self.request)
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         return super().form_valid(form)
@@ -67,7 +66,15 @@ class PostCreateView(CreateView):
         return reverse('blog:post-detail', kwargs={'slug': self.object.slug})
 
 
-class PostEditView(UpdateView):
+class PostOwnerMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.id != self.get_object().user.id:
+            return HttpResponseForbidden()
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class PostEditView(PostOwnerMixin, UpdateView):
     model = Post
     form_class = PostModelForm
     template_name = 'blog/post-update.html'
@@ -76,7 +83,7 @@ class PostEditView(UpdateView):
         return reverse('blog:post-detail', kwargs={'slug': self.object.slug})
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(PostOwnerMixin, DeleteView):
     model = Post
     success_url = reverse_lazy('blog:post-list')
     template_name = 'blog/post-delete.html'
