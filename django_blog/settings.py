@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'blog.apps.BlogConfig',
     'user.apps.UserConfig',
 ]
@@ -129,3 +130,8 @@ AUTH_USER_MODEL = 'user.User'
 LOGIN_URL = 'user:login'
 LOGOUT_REDIRECT_URL = 'user:login'
 LOGIN_REDIRECT_URL = 'blog:home'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
