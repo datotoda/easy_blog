@@ -1,3 +1,4 @@
+from django.contrib.auth import password_validation
 from rest_framework import serializers
 
 import blog.models
@@ -13,6 +14,23 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = user.models.User
         fields = ['url', 'username', 'email', 'first_name', 'last_name',
                   'phone_number', 'image_url', 'is_active', 'is_superuser']
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    passwd = serializers.CharField(label='Password', max_length=150, required=True, write_only=True)
+
+    def create(self, validated_data):
+        passwd = validated_data.pop('passwd')
+        password_validation.validate_password(passwd)
+        u = super().create(validated_data)
+        u.set_password(passwd)
+        u.save()
+        return u
+
+    class Meta:
+        model = user.models.User
+        fields = ['username', 'email', 'first_name', 'last_name',
+                  'phone_number', 'image_url', 'passwd']
 
 
 class ColorSerializer(serializers.HyperlinkedModelSerializer):
@@ -50,5 +68,3 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = blog.models.Post
         fields = ['url', 'title', 'value', 'user', 'tags', 'image_url', 'slug', 'updated_at', 'created_at', 'comments']
-
-
