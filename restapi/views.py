@@ -6,9 +6,21 @@ from restapi import serializers
 from restapi import permisions as my_permissions
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class MultipleSerializerMixin:
+    serializers = None
+
+    def get_serializer_class(self):
+        if self.serializers:
+            return self.serializers.get(self.action, self.serializers.get('default', super().get_serializer_class()))
+        return super().get_serializer_class()
+
+
+class UserViewSet(MultipleSerializerMixin, viewsets.ModelViewSet):
     queryset = user.models.User.objects.all()
     serializer_class = serializers.UserSerializer
+    serializers = {
+        'create': serializers.UserCreateSerializer,
+    }
     permission_classes = [permissions.IsAuthenticated, my_permissions.IsUserOrReadOnly]
 
 
