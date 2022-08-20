@@ -8,6 +8,7 @@
     <body>
 
         <ul>
+            <li><a href="{% url 'api:api-root' %}">API</a></li>
             <li><a href={% url 'blog:home' %}>home</a></li>
             <li><a href="{% url 'blog:post-list' %}">posts</a></li>
             {% if not request.user.is_authenticated %}
